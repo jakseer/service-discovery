@@ -9,8 +9,9 @@ type ServiceInstance struct {
 }
 
 type EndPointInstance struct {
-	Endpoint string `json:"endpoint"`
-	Weight   int32  `json:"weight"`
+	Endpoint  string `json:"endpoint"`
+	Weight    int32  `json:"weight"`
+	HealthyAt int64  `json:"healthy_at"`
 }
 
 type Watcher interface {
