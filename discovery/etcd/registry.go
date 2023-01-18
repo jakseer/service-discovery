@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"service-discovery/discovery"
 	"time"
 
@@ -71,6 +72,7 @@ func (r *Registry) Register(ctx context.Context, service *discovery.ServiceInsta
 		return err
 	}
 
+	go r.heartBeat(ctx, leaseID)
 	return nil
 }
 
@@ -118,4 +120,23 @@ func (r *Registry) registerWithKV(ctx context.Context, key string, value string)
 		return 0, err
 	}
 	return grant.ID, nil
+}
+
+func (r *Registry) heartBeat(ctx context.Context, leaseID clientv3.LeaseID) {
+	ch, err := r.client.KeepAlive(ctx, leaseID)
+	if err != nil {
+		return
+	}
+
+	for {
+		select {
+		case keepaliveResp, ok := <-ch:
+			if !ok {
+				return
+			}
+			log.Default().Printf("%s keepalive resp=%+v", time.Now().String(), keepaliveResp)
+		case <-ctx.Done():
+			return
+		}
+	}
 }
