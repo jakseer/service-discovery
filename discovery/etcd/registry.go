@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"service-discovery/discovery"
 	"time"
 
@@ -130,11 +129,10 @@ func (r *Registry) heartBeat(ctx context.Context, leaseID clientv3.LeaseID) {
 
 	for {
 		select {
-		case keepaliveResp, ok := <-ch:
+		case _, ok := <-ch:
 			if !ok {
 				return
 			}
-			log.Default().Printf("%s keepalive resp=%+v", time.Now().String(), keepaliveResp)
 		case <-ctx.Done():
 			return
 		}
