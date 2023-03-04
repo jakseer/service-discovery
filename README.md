@@ -1,6 +1,6 @@
 # service-discovery
 
-用 Go 编写的服务发现组件，底层接入 etcd、consul、zookeeper 中间件，实现了服务注册、发现、健康检查、负载均衡、服务预热等功能。
+用 Go 编写的服务发现组件，底层接入 etcd、consul、zookeeper 等中间件，实现了服务注册、发现、健康检查、负载均衡、服务预热等功能。
 
 ## 功能
 服务发现整体架构
